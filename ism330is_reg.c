@@ -1760,10 +1760,10 @@ int32_t ism330is_pin_int2_route_set(stmdev_ctx_t *ctx,
   ism330is_md2_cfg_t md2_cfg;
   int32_t ret;
 
-  ret = ism330is_read_reg(ctx, ISM330IS_INT1_CTRL, (uint8_t *)&int2_ctrl, 1);
+  ret = ism330is_read_reg(ctx, ISM330IS_INT2_CTRL, (uint8_t *)&int2_ctrl, 1);
   if (ret == 0)
   {
-    ret = ism330is_read_reg(ctx, ISM330IS_MD1_CFG, (uint8_t *)&md2_cfg, 1);
+    ret = ism330is_read_reg(ctx, ISM330IS_MD2_CFG, (uint8_t *)&md2_cfg, 1);
   }
 
   if (ret == 0)
@@ -1772,11 +1772,11 @@ int32_t ism330is_pin_int2_route_set(stmdev_ctx_t *ctx,
     int2_ctrl.int2_drdy_g = val.drdy_gy;
     int2_ctrl.int2_drdy_temp = val.drdy_temp;
     int2_ctrl.int2_sleep_ispu = val.ispu_sleep;
-    ret += ism330is_write_reg(ctx, ISM330IS_INT1_CTRL, (uint8_t *)&int2_ctrl, 1);
+    ret += ism330is_write_reg(ctx, ISM330IS_INT2_CTRL, (uint8_t *)&int2_ctrl, 1);
 
     md2_cfg.int2_ispu = val.ispu;
     md2_cfg.int2_timestamp = val.timestamp;
-    ret += ism330is_write_reg(ctx, ISM330IS_MD1_CFG, (uint8_t *)&md2_cfg, 1);
+    ret += ism330is_write_reg(ctx, ISM330IS_MD2_CFG, (uint8_t *)&md2_cfg, 1);
   }
 
   return ret;
@@ -1797,10 +1797,10 @@ int32_t ism330is_pin_int2_route_get(stmdev_ctx_t *ctx,
   ism330is_md2_cfg_t md2_cfg;
   int32_t ret;
 
-  ret = ism330is_read_reg(ctx, ISM330IS_INT1_CTRL, (uint8_t *)&int2_ctrl, 1);
+  ret = ism330is_read_reg(ctx, ISM330IS_INT2_CTRL, (uint8_t *)&int2_ctrl, 1);
   if (ret == 0)
   {
-    ret = ism330is_read_reg(ctx, ISM330IS_MD1_CFG, (uint8_t *)&md2_cfg, 1);
+    ret = ism330is_read_reg(ctx, ISM330IS_MD2_CFG, (uint8_t *)&md2_cfg, 1);
   }
 
   if (ret == 0)
