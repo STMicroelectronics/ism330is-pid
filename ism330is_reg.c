@@ -332,11 +332,10 @@ int32_t ism330is_device_id_get(stmdev_ctx_t *ctx, uint8_t *val)
   * @brief  Software reset. Restore the default values in user registers.[set]
   *
   * @param  ctx    Read / write interface definitions.(ptr)
-  * @param  val    Change the values of sw_reset in reg CTRL_REG1.
   * @retval        Interface status (MANDATORY: return 0 -> no Error).
   *
   */
-int32_t ism330is_reset_set(stmdev_ctx_t *ctx, uint8_t val)
+int32_t ism330is_software_reset(stmdev_ctx_t *ctx)
 {
   ism330is_ctrl3_c_t ctrl3_c;
   int32_t ret;
@@ -345,28 +344,16 @@ int32_t ism330is_reset_set(stmdev_ctx_t *ctx, uint8_t val)
 
   if (ret == 0)
   {
-    ctrl3_c.sw_reset = val;
+    ret += ism330is_xl_data_rate_set(ctx, ISM330IS_XL_ODR_OFF);
+    ret += ism330is_gy_data_rate_set(ctx, ISM330IS_GY_ODR_OFF);
+
+    ctrl3_c.sw_reset = PROPERTY_ENABLE;
     ret = ism330is_write_reg(ctx, ISM330IS_CTRL3_C, (uint8_t *)&ctrl3_c, 1);
+
+    do {
+      ret += ism330is_read_reg(ctx, ISM330IS_CTRL3_C, (uint8_t *)&ctrl3_c, 1);
+    } while (ret == 0 && ctrl3_c.sw_reset == PROPERTY_ENABLE);
   }
-
-  return ret;
-}
-
-/**
-  * @brief  Software reset. Restore the default values in user registers.[get]
-  *
-  * @param  ctx    Read / write interface definitions.(ptr)
-  * @param  val    Get the values of sw_reset in reg CTRL_REG1.(ptr)
-  * @retval        Interface status (MANDATORY: return 0 -> no Error).
-  *
-  */
-int32_t ism330is_reset_get(stmdev_ctx_t *ctx, uint8_t *val)
-{
-  ism330is_ctrl3_c_t ctrl3_c;
-  int32_t ret;
-
-  ret = ism330is_read_reg(ctx, ISM330IS_CTRL3_C, (uint8_t *)&ctrl3_c, 1);
-  *val = ctrl3_c.sw_reset;
 
   return ret;
 }

@@ -2357,8 +2357,7 @@ int32_t ism330is_data_ready_mode_get(stmdev_ctx_t *ctx,
 int32_t ism330is_device_id_set(stmdev_ctx_t *ctx, uint8_t val);
 int32_t ism330is_device_id_get(stmdev_ctx_t *ctx, uint8_t *val);
 
-int32_t ism330is_reset_set(stmdev_ctx_t *ctx, uint8_t val);
-int32_t ism330is_reset_get(stmdev_ctx_t *ctx, uint8_t *val);
+int32_t ism330is_software_reset(stmdev_ctx_t *ctx);
 
 int32_t ism330is_boot_set(stmdev_ctx_t *ctx, uint8_t val);
 int32_t ism330is_boot_get(stmdev_ctx_t *ctx, uint8_t *val);
