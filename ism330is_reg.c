@@ -3102,8 +3102,8 @@ int32_t ism330is_ispu_write_dummy_cfg(stmdev_ctx_t *ctx, uint8_t offset,
   * @retval          interface status (MANDATORY: return 0 -> no Error)
   *
   */
-int32_t ism330is_ispu_ready_dummy_cfg(stmdev_ctx_t *ctx, uint8_t offset,
-                                      uint8_t *val, uint8_t len)
+int32_t ism330is_ispu_read_dummy_cfg(stmdev_ctx_t *ctx, uint8_t offset,
+                                     uint8_t *val, uint8_t len)
 {
   int32_t ret;
 
