@@ -3299,7 +3299,7 @@ static int32_t ism330is_ispu_sel_memory_addr(stmdev_ctx_t *ctx, uint16_t mem_add
 }
 
 /**
-  * @brief  ISPU write memory
+  * @brief  ISPU write memory. ISPU clock is disabled inside the routine.
   *
   * @param  ctx      read / write interface definitions
   * @param  mem_sel  ISM330IS_ISPU_DATA_RAM_MEMORY, ISM330IS_ISPU_PROGRAM_RAM_MEMORY
@@ -3314,16 +3314,24 @@ int32_t ism330is_ispu_write_memory(stmdev_ctx_t *ctx,
                                    uint16_t mem_addr, uint8_t *mem_data, uint16_t len)
 {
   ism330is_ispu_mem_sel_t ispu_mem_sel;
+  ism330is_ispu_config_t ispu_cfg;
+  uint8_t clk_dis;
   int32_t ret;
   uint16_t i;
 
   ret = ism330is_mem_bank_set(ctx, ISM330IS_ISPU_MEM_BANK);
   if (ret == 0)
   {
+    /* disable ISPU clock */
+    ret = ism330is_read_reg(ctx, ISM330IS_ISPU_CONFIG, (uint8_t *)&ispu_cfg, 1);
+    clk_dis = ispu_cfg.clk_dis;
+    ispu_cfg.clk_dis = 1;
+    ret += ism330is_write_reg(ctx, ISM330IS_ISPU_CONFIG, (uint8_t *)&ispu_cfg, 1);
+
     /* select memory to be written */
     ispu_mem_sel.read_mem_en = 0;
     ispu_mem_sel.mem_sel = (uint8_t)mem_sel;
-    ret = ism330is_write_reg(ctx, ISM330IS_ISPU_MEM_SEL, (uint8_t *)&ispu_mem_sel, 1);
+    ret += ism330is_write_reg(ctx, ISM330IS_ISPU_MEM_SEL, (uint8_t *)&ispu_mem_sel, 1);
 
     if (mem_sel == ISM330IS_ISPU_PROGRAM_RAM_MEMORY)
     {
@@ -3354,6 +3362,10 @@ int32_t ism330is_ispu_write_memory(stmdev_ctx_t *ctx,
       ret += ism330is_ispu_sel_memory_addr(ctx, mem_addr);
       ret += ism330is_write_reg(ctx, ISM330IS_ISPU_MEM_DATA, &mem_data[0], len);
     }
+
+    /* set ISPU clock back to previous value */
+    ispu_cfg.clk_dis = clk_dis;
+    ret += ism330is_write_reg(ctx, ISM330IS_ISPU_CONFIG, (uint8_t *)&ispu_cfg, 1);
   }
 
   ret += ism330is_mem_bank_set(ctx, ISM330IS_MAIN_MEM_BANK);
@@ -3362,7 +3374,7 @@ int32_t ism330is_ispu_write_memory(stmdev_ctx_t *ctx,
 }
 
 /**
-  * @brief  ISPU read memory
+  * @brief  ISPU read memory. ISPU clock is disabled inside the routine.
   *
   * @param  ctx      read / write interface definitions
   * @param  mem_sel  ISM330IS_ISPU_DATA_RAM_MEMORY, ISM330IS_ISPU_PROGRAM_RAM_MEMORY
@@ -3377,22 +3389,36 @@ int32_t ism330is_ispu_read_memory(stmdev_ctx_t *ctx,
                                   uint16_t mem_addr, uint8_t *mem_data, uint16_t len)
 {
   ism330is_ispu_mem_sel_t ispu_mem_sel;
+  ism330is_ispu_config_t ispu_cfg;
+  uint8_t clk_dis;
   int32_t ret;
   uint8_t dummy;
 
   ret = ism330is_mem_bank_set(ctx, ISM330IS_ISPU_MEM_BANK);
+
   if (ret == 0)
   {
+    /* disable ISPU clock */
+    ret = ism330is_read_reg(ctx, ISM330IS_ISPU_CONFIG, (uint8_t *)&ispu_cfg, 1);
+    clk_dis = ispu_cfg.clk_dis;
+    ispu_cfg.clk_dis = 1;
+    ret += ism330is_write_reg(ctx, ISM330IS_ISPU_CONFIG, (uint8_t *)&ispu_cfg, 1);
+
     /* select memory to be read */
     ispu_mem_sel.read_mem_en = 1;
     ispu_mem_sel.mem_sel = (uint8_t)mem_sel;
-    ret = ism330is_write_reg(ctx, ISM330IS_ISPU_MEM_SEL, (uint8_t *)&ispu_mem_sel, 1);
+    ret += ism330is_write_reg(ctx, ISM330IS_ISPU_MEM_SEL, (uint8_t *)&ispu_mem_sel, 1);
 
     /* select memory address */
     ret += ism330is_ispu_sel_memory_addr(ctx, mem_addr);
-    ret += ism330is_read_reg(ctx, ISM330IS_ISPU_MEM_DATA, &dummy, 1);
 
+    /* read data */
+    ret += ism330is_read_reg(ctx, ISM330IS_ISPU_MEM_DATA, &dummy, 1);
     ret += ism330is_read_reg(ctx, ISM330IS_ISPU_MEM_DATA, &mem_data[0], len);
+
+    /* set ISPU clock back to previous value */
+    ispu_cfg.clk_dis = clk_dis;
+    ret += ism330is_write_reg(ctx, ISM330IS_ISPU_CONFIG, (uint8_t *)&ispu_cfg, 1);
   }
 
   ret += ism330is_mem_bank_set(ctx, ISM330IS_MAIN_MEM_BANK);
