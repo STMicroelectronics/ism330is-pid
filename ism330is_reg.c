@@ -344,7 +344,7 @@ int32_t ism330is_software_reset(stmdev_ctx_t *ctx)
     ret += ism330is_gy_data_rate_set(ctx, ISM330IS_GY_ODR_OFF);
 
     ctrl3_c.sw_reset = PROPERTY_ENABLE;
-    ret = ism330is_write_reg(ctx, ISM330IS_CTRL3_C, (uint8_t *)&ctrl3_c, 1);
+    ret += ism330is_write_reg(ctx, ISM330IS_CTRL3_C, (uint8_t *)&ctrl3_c, 1);
 
     do {
       ret += ism330is_read_reg(ctx, ISM330IS_CTRL3_C, (uint8_t *)&ctrl3_c, 1);
@@ -2202,6 +2202,7 @@ int32_t ism330is_sh_syncro_mode_get(stmdev_ctx_t *ctx,
       *val = ISM330IS_SH_TRG_XL_GY_DRDY;
       break;
   }
+
   return ret;
 }
 
@@ -2265,6 +2266,7 @@ int32_t ism330is_sh_write_mode_get(stmdev_ctx_t *ctx,
       *val = ISM330IS_EACH_SH_CYCLE;
       break;
   }
+
   return ret;
 }
 
@@ -3027,27 +3029,32 @@ int32_t ism330is_ispu_write_memory(stmdev_ctx_t *ctx,
 
     if (mem_sel == ISM330IS_ISPU_PROGRAM_RAM_MEMORY)
     {
-      uint16_t addr_s[4] = {0U, 0U, 0U, 0U};
-      uint16_t len_s[4] = {0U, 0U, 0U, 0U};
+      uint16_t addr_s[4] = {(uint16_t)0, (uint16_t)0, (uint16_t)0, (uint16_t)0};
+      uint16_t len_s[4] = {(uint16_t)0, (uint16_t)0, (uint16_t)0, (uint16_t)0};
       uint8_t j = 0;
       uint16_t k;
 
       addr_s[0] = mem_addr;
-      for (i = 0, k = 0; i < len; i++, k++)
+      k = 0U;
+      for (i = 0U; i < len; i++)
       {
         if ((mem_addr + i == 0x2000U) || (mem_addr + i == 0x4000U) || (mem_addr + i == 0x6000U))
         {
           len_s[j++] = k;
           addr_s[j] = mem_addr + i;
-          k = 0;
+          k = 0U;
         }
+
+        k++;
       }
       len_s[j++] = k;
 
-      for (i = 0, k = 0; i < j; k+=len_s[i], i++)
+      k = 0U;
+      for (i = 0U; i < j; i++)
       {
         ret += ism330is_ispu_sel_memory_addr(ctx, addr_s[i]);
         ret += ism330is_write_reg(ctx, ISM330IS_ISPU_MEM_DATA, &mem_data[k], len_s[i]);
+        k+=len_s[i];
       }
     } else {
       /* select memory address */
@@ -3087,7 +3094,6 @@ int32_t ism330is_ispu_read_memory(stmdev_ctx_t *ctx,
   uint8_t dummy;
 
   ret = ism330is_mem_bank_set(ctx, ISM330IS_ISPU_MEM_BANK);
-
   if (ret == 0)
   {
     /* disable ISPU clock */
