@@ -207,17 +207,13 @@ int32_t ism330is_odr_cal_reg_get(stmdev_ctx_t *ctx, uint8_t *val)
   */
 int32_t ism330is_mem_bank_set(stmdev_ctx_t *ctx, ism330is_mem_bank_t val)
 {
-  ism330is_func_cfg_access_t func_cfg_access;
+  ism330is_func_cfg_access_t func_cfg_access = {0x0};
   int32_t ret;
 
-  ret = ism330is_read_reg(ctx, ISM330IS_FUNC_CFG_ACCESS, (uint8_t *)&func_cfg_access, 1);
-
-  if (ret == 0)
-  {
-    func_cfg_access.shub_reg_access = (val == ISM330IS_SENSOR_HUB_MEM_BANK) ? 0x1U : 0x0U;
-    func_cfg_access.ispu_reg_access = (val == ISM330IS_ISPU_MEM_BANK) ? 0x1U : 0x0U;
-    ret = ism330is_write_reg(ctx, ISM330IS_FUNC_CFG_ACCESS, (uint8_t *)&func_cfg_access, 1);
-  }
+  /* no need to read it first as the only other field is a ispu reset bit */
+  func_cfg_access.shub_reg_access = (val == ISM330IS_SENSOR_HUB_MEM_BANK) ? 0x1U : 0x0U;
+  func_cfg_access.ispu_reg_access = (val == ISM330IS_ISPU_MEM_BANK) ? 0x1U : 0x0U;
+  ret = ism330is_write_reg(ctx, ISM330IS_FUNC_CFG_ACCESS, (uint8_t *)&func_cfg_access, 1);
 
   return ret;
 }
