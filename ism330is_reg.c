@@ -2774,6 +2774,24 @@ int32_t ism330is_sh_slv3_cfg_read(stmdev_ctx_t *ctx,
 }
 
 /**
+  * @brief  Sensor hub source register.[get]
+  *
+  * @param  ctx      read / write interface definitions
+  * @param  val      union of registers from STATUS_MASTER to
+  * @retval          interface status (MANDATORY: return 0 -> no Error)
+  *
+  */
+int32_t ism330is_sh_status_get(stmdev_ctx_t *ctx,
+                               ism330is_status_master_t *val)
+{
+  int32_t ret;
+
+  ret = ism330is_read_reg(ctx, ISM330IS_STATUS_MASTER_MAINPAGE, (uint8_t *) val, 1);
+
+  return ret;
+}
+
+/**
   * @}
   *
   */
