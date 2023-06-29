@@ -1936,23 +1936,14 @@ int32_t ism330is_pin_polarity_get(stmdev_ctx_t *ctx,
   * @retval          interface status (MANDATORY: return 0 -> no Error)
   *
   */
-int32_t ism330is_sh_read_data_raw_get(stmdev_ctx_t *ctx,
-                                      ism330is_emb_sh_read_t *val,
+int32_t ism330is_sh_read_data_raw_get(stmdev_ctx_t *ctx, uint8_t *val,
                                       uint8_t len)
 {
   int32_t ret;
 
   ret = ism330is_mem_bank_set(ctx, ISM330IS_SENSOR_HUB_MEM_BANK);
-  if (ret == 0)
-  {
-    ret = ism330is_read_reg(ctx, ISM330IS_SENSOR_HUB_1, (uint8_t *) val,
-                            len);
-  }
-  if (ret == 0)
-  {
-    ret = ism330is_mem_bank_set(ctx, ISM330IS_MAIN_MEM_BANK);
-  }
-
+  ret += ism330is_read_reg(ctx, ISM330IS_SENSOR_HUB_1, val, len);
+  ret += ism330is_mem_bank_set(ctx, ISM330IS_MAIN_MEM_BANK);
 
   return ret;
 }

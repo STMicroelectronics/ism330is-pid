@@ -2602,29 +2602,7 @@ int32_t ism330is_acceleration_raw_get(stmdev_ctx_t *ctx, int16_t *val);
 int32_t ism330is_odr_cal_reg_set(stmdev_ctx_t *ctx, uint8_t val);
 int32_t ism330is_odr_cal_reg_get(stmdev_ctx_t *ctx, uint8_t *val);
 
-typedef struct
-{
-  ism330is_sensor_hub_1_t   sh_byte_1;
-  ism330is_sensor_hub_2_t   sh_byte_2;
-  ism330is_sensor_hub_3_t   sh_byte_3;
-  ism330is_sensor_hub_4_t   sh_byte_4;
-  ism330is_sensor_hub_5_t   sh_byte_5;
-  ism330is_sensor_hub_6_t   sh_byte_6;
-  ism330is_sensor_hub_7_t   sh_byte_7;
-  ism330is_sensor_hub_8_t   sh_byte_8;
-  ism330is_sensor_hub_9_t   sh_byte_9;
-  ism330is_sensor_hub_10_t  sh_byte_10;
-  ism330is_sensor_hub_11_t  sh_byte_11;
-  ism330is_sensor_hub_12_t  sh_byte_12;
-  ism330is_sensor_hub_13_t  sh_byte_13;
-  ism330is_sensor_hub_14_t  sh_byte_14;
-  ism330is_sensor_hub_15_t  sh_byte_15;
-  ism330is_sensor_hub_16_t  sh_byte_16;
-  ism330is_sensor_hub_17_t  sh_byte_17;
-  ism330is_sensor_hub_18_t  sh_byte_18;
-} ism330is_emb_sh_read_t;
-int32_t ism330is_sh_read_data_raw_get(stmdev_ctx_t *ctx,
-                                      ism330is_emb_sh_read_t *val,
+int32_t ism330is_sh_read_data_raw_get(stmdev_ctx_t *ctx, uint8_t *val,
                                       uint8_t len);
 
 typedef enum
