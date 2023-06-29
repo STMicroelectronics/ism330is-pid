@@ -2677,14 +2677,9 @@ typedef struct
   uint8_t   slv_subadd;
   uint8_t   slv_len;
 } ism330is_sh_cfg_read_t;
-int32_t ism330is_sh_slv0_cfg_read(stmdev_ctx_t *ctx,
-                                  ism330is_sh_cfg_read_t *val);
-int32_t ism330is_sh_slv1_cfg_read(stmdev_ctx_t *ctx,
-                                  ism330is_sh_cfg_read_t *val);
-int32_t ism330is_sh_slv2_cfg_read(stmdev_ctx_t *ctx,
-                                  ism330is_sh_cfg_read_t *val);
-int32_t ism330is_sh_slv3_cfg_read(stmdev_ctx_t *ctx,
-                                  ism330is_sh_cfg_read_t *val);
+int32_t ism330is_sh_slv_cfg_read(stmdev_ctx_t *ctx, uint8_t idx,
+                                 ism330is_sh_cfg_read_t *val);
+
 int32_t ism330is_sh_status_get(stmdev_ctx_t *ctx,
                                ism330is_status_master_t *val);
 
