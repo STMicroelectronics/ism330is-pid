@@ -57,13 +57,33 @@ This directory contains the ISM330IS component drivers.
 
 </div>
 
-<input type="checkbox" id="collapse-section3" checked aria-hidden="true">
+<input type="checkbox" id="collapse-section3" aria-hidden="true">
 <label for="collapse-section3" aria-hidden="true">V2.0.1 / 01-June-2023</label>
 <div>
 
 ## Main changes
 
 - Fix Release_Notes.md
+
+##
+
+</div>
+
+<input type="checkbox" id="collapse-section4" checked aria-hidden="true">
+<label for="collapse-section4" aria-hidden="true">V2.1.0 / 30-June-2023</label>
+<div>
+
+## Main changes
+
+- ism330is_reg.c: Fix MISRA errors
+- ism330is_reg.c: review read/write reg ret value checks
+- Use a single ism330is_sh_slv_cfg_read() API for all targets
+- ism330is: fix shub register names (SLAVE -> SLV)
+- sensor_hub: add sh_status_get() API
+- sensor_hub: change sh_read_data_raw_get() API signature
+- ism330is: Change ism330is_mem_bank_set() API
+- Fix ISPU read/write routines adding clk disabling
+- Fix API name typo (ispu_read_dummy_cfg)
 
 ##
 
