@@ -3145,10 +3145,10 @@ int32_t ism330is_ispu_boot_get(const stmdev_ctx_t *ctx,
     goto exit;
   }
 
-  *val = ISM330IS_ISPU_TURN_OFF;
+  *val = ISM330IS_ISPU_TURN_ON;
   if (ispu_config.ispu_rst_n == 1U || ispu_config.clk_dis == 1U)
   {
-    *val = ISM330IS_ISPU_TURN_ON;
+    *val = ISM330IS_ISPU_TURN_OFF;
   }
 
 exit:
