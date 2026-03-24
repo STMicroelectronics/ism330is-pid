@@ -2826,6 +2826,9 @@ int32_t ism330is_ispu_clock_get(const stmdev_ctx_t *ctx,
     case 1:
       *val = ISM330IS_ISPU_CLK_10MHz;
       break;
+    default:
+      *val = ISM330IS_ISPU_CLK_5MHz;
+      break;
   }
 
   return ret;
